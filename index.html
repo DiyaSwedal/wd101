@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+</head>
+<body>
+    <form id="registration-form">
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        function setDateRestrictions() {
+            const today = new Date();
+            const minDate = new Date(today.getFullYear() - 55, today.getMonth(), today.getDate());
+            const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+
+            document.getElementById('dob').setAttribute('min', minDate.toISOString().split('T')[0]);
+            document.getElementById('dob').setAttribute('max', maxDate.toISOString().split('T')[0]);
+        }
+
+        setDateRestrictions();
+    </script>
+</body>
+</html>
+
