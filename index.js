@@ -1,8 +1,7 @@
- // Form submission handling
-document.getElementById('registration-form').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent default form submission
+ 
+  document.getElementById('registration-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the form from submitting
 
-    // Get form values
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
@@ -29,21 +28,21 @@ document.getElementById('registration-form').addEventListener('submit', function
         return; // Stop form processing
     }
 
-    // Add entry to localStorage
+    // Save to localStorage and update table
     addEntryToLocalStorage(name, email, password, dobInput, terms);
-    
-    // Update table immediately after submission
+    console.log('Entry saved to localStorage:', { name, email, password, dobInput, terms });
+
     updateTable();
+    console.log('Table updated after submission');
 });
 
-// Add new entry to localStorage
 function addEntryToLocalStorage(name, email, password, dob, terms) {
     let entries = JSON.parse(localStorage.getItem('formEntries')) || [];
     entries.push({ name, email, password, dob, terms });
     localStorage.setItem('formEntries', JSON.stringify(entries));
+    console.log('localStorage updated:', localStorage.getItem('formEntries'));
 }
 
-// Update table with all entries from localStorage
 function updateTable() {
     const table = document.getElementById('data-table').getElementsByTagName('tbody')[0];
     table.innerHTML = ''; // Clear the table first
@@ -57,7 +56,13 @@ function updateTable() {
         newRow.insertCell(3).textContent = entry.dob;
         newRow.insertCell(4).textContent = entry.terms ? 'Yes' : 'No';
     });
+    console.log('Table content updated:', entries);
 }
 
-// Load table on page load
+// Load data from localStorage when the page loads
 window.onload = updateTable;
+function addEntryToLocalStorage(name, email, password, dob, terms) {
+    let entries = JSON.parse(localStorage.getItem('formEntries')) || [];
+    entries.push({ name, email, password, dob, terms });
+    localStorage.setItem('formEntries', JSON.stringify(entries)); // Save as an array
+}
