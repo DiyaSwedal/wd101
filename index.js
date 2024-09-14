@@ -1,84 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration Form</title>
-</head>
-<body>
-    <h1>Registration Form</h1>
-    <form id="registration-form">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required><br><br>
-        
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
-        
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
-        
-        <label for="dob">Date of Birth:</label>
-        <input type="date" id="dob" name="dob" required><br><br>
-        
-        <label for="accepted-terms">Accept Terms:</label>
-        <input type="checkbox" id="accepted-terms" name="accepted-terms" required><br><br>
-        
-        <button type="submit">Submit</button>
-    </form>
+document.getElementById('registration-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form submission
+    
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const dobInput = document.getElementById('dob').value;
+    const terms = document.getElementById('terms').checked;
 
-    <h2>Registered Users</h2>
-    <table id="user-table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Password</th>
-                <th>Dob</th>
-                <th>Accepted terms?</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Entries will go here -->
-        </tbody>
-    </table>
+    // Calculate Age
+    const dob = new Date(dobInput);
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+        age--;
+    }
 
-    <script>
-        // Set restrictions on date input field
-        function setDateRestrictions() {
-            const today = new Date();
-            const minDate = new Date(today.getFullYear() - 55, today.getMonth(), today.getDate());
-            const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+    // Validate Age (18-55)
+    if (age < 18 || age > 55) {
+        alert('Date of birth must indicate an age between 18 and 55.');
+        return; // Stop form processing
+    }
 
-            document.getElementById('dob').setAttribute('min', minDate.toISOString().split('T')[0]);
-            document.getElementById('dob').setAttribute('max', maxDate.toISOString().split('T')[0]);
-        }
+    // Validate Email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        alert('Please enter a valid email address.');
+        return;
+    }
 
-        setDateRestrictions();
+    // Save data to local storage and update table
+    addEntryToLocalStorage(name, email, password, dobInput, terms);
+    updateTable();
+});
 
-        // Handle form submission and add data to the table
-        document.getElementById('registration-form').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent form from submitting normally
+function addEntryToLocalStorage(name, email, password, dob, terms) {
+    const entries = JSON.parse(localStorage.getItem('formEntries')) || [];
+    entries.push({ name, email, password, dob, terms });
+    localStorage.setItem('formEntries', JSON.stringify(entries));
+}
 
-            // Get the form data
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const dob = document.getElementById('dob').value;
-            const acceptedTerms = document.getElementById('accepted-terms').checked ? 'Yes' : 'No';
+function updateTable() {
+    const table = document.getElementById('data-table').getElementsByTagName('tbody')[0];
+    table.innerHTML = ''; // Clear the table before adding new rows
 
-            // Add a new row to the table with form data
-            const table = document.getElementById('user-table').getElementsByTagName('tbody')[0];
-            const newRow = table.insertRow();
+    const entries = JSON.parse(localStorage.getItem('formEntries')) || [];
+    entries.forEach(entry => {
+        const newRow = table.insertRow();
 
-            newRow.insertCell(0).textContent = name;
-            newRow.insertCell(1).textContent = email;
-            newRow.insertCell(2).textContent = password;
-            newRow.insertCell(3).textContent = dob;
-            newRow.insertCell(4).textContent = acceptedTerms;
+        newRow.insertCell(0).textContent = entry.name;
+        newRow.insertCell(1).textContent = entry.email;
+        newRow.insertCell(2).textContent = entry.password;
+        newRow.insertCell(3).textContent = entry.dob;
+        newRow.insertCell(4).textContent = entry.terms ? 'Yes' : 'No';
+    });
+}
 
-            // Clear the form after submission
-            document.getElementById('registration-form').reset();
-        });
-    </script>
-</body>
-</html>
+// Load data and update the table when the page is loaded
+window.onload = updateTable;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if (!emailRegex.test(email)) {
+    alert('Please enter a valid email address.');
+    return;
+}
