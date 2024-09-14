@@ -6,24 +6,44 @@
     <title>Registration Form</title>
 </head>
 <body>
+    <!-- Registration Form -->
     <form id="registration-form">
+        <label for="name">Name:</label>
+        <input type="text" id="name" required><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" required><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" required><br>
+
         <label for="dob">Date of Birth:</label>
-        <input type="date" id="dob" name="dob" required>
+        <input type="date" id="dob" required><br>
+
+        <label>
+            <input type="checkbox" id="terms" required>
+            Accept Terms and Conditions
+        </label><br>
+
         <button type="submit">Submit</button>
     </form>
 
-    <script>
-        function setDateRestrictions() {
-            const today = new Date();
-            const minDate = new Date(today.getFullYear() - 55, today.getMonth(), today.getDate());
-            const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+    <!-- Table Element with Required Headers -->
+    <table id="data-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Password</th>
+                <th>Dob</th>
+                <th>Accepted terms?</th>
+            </tr>
+        </thead>
+        <tbody>
+        <!-- The table body will be populated with form data -->
+        </tbody>
+    </table>
 
-            document.getElementById('dob').setAttribute('min', minDate.toISOString().split('T')[0]);
-            document.getElementById('dob').setAttribute('max', maxDate.toISOString().split('T')[0]);
-        }
-
-        setDateRestrictions();
-    </script>
+    <script src="index.js"></script>
 </body>
 </html>
-
