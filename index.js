@@ -1,3 +1,4 @@
+
  
   document.getElementById('registration-form').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent the form from submitting
@@ -14,6 +15,16 @@
         alert('Please enter a valid email address.');
         return;
     }
+   const retrieve = () => {
+    let entries = localStorage.getItem("user-entries");
+    if (entries) {
+        entries = JSON.parse(entries);
+    } else {
+        entries = [];
+    }
+    return entries;
+};
+
 
     // Validate age (18-55)
     const dob = new Date(dobInput);
