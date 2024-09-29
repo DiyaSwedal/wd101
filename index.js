@@ -76,4 +76,12 @@ function addEntryToLocalStorage(name, email, password, dob, terms) {
     let entries = JSON.parse(localStorage.getItem('formEntries')) || [];
     entries.push({ name, email, password, dob, terms });
     localStorage.setItem('formEntries', JSON.stringify(entries)); // Save as an array
+  addEntryToTable(entry);
+    
+    // Save the entry to localStorage for persistence
+    saveEntryToLocalStorage(entry);
+
+    // Reset the form fields for the next entry
+    registrationForm.reset();
 }
+
